@@ -59,18 +59,6 @@ RUN \
     pynzb \
     requests && \
   pip3 install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.16/ -r requirements.txt && \
-  echo "**** install nzb-notify ****" && \   
-  NZBNOTIFY_VERSION=$(curl -s https://api.github.com/repos/caronc/nzb-notify/releases/latest \
-    | awk '/tag_name/{print $4;exit}' FS='[""]') && \
-  mkdir -p /app/nzbnotify && \
-  curl -o \
-    /tmp/nzbnotify.tar.gz -L \
-    "https://api.github.com/repos/caronc/nzb-notify/tarball/${NZBNOTIFY_VERSION}" && \
-  tar xf \
-    /tmp/nzbnotify.tar.gz -C \
-    /app/nzbnotify --strip-components=1 && \
-  cd /app/nzbnotify && \
-  pip3 install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.16/ -r requirements.txt && \
   echo "**** cleanup ****" && \
   ln -s \
     /usr/bin/python3 \
@@ -83,6 +71,7 @@ RUN \
 
 # add local files
 COPY root/ /
+COPY config.py /app/sabnzbd/sabnzbd/
 
 # ports and volumes
 EXPOSE 8080
